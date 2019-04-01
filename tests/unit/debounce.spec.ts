@@ -5,6 +5,8 @@ import flushPromises from 'flush-promises'
 import { mount } from '@vue/test-utils'
 import { Debounce } from '../../src/vue-debounce-decorator'
 
+jest.useFakeTimers()
+
 // Component factory
 const factory = (debounceTime: number = 500, componentOptions?: any) => {
   @Component({
@@ -17,9 +19,20 @@ const factory = (debounceTime: number = 500, componentOptions?: any) => {
     someValue = 'Hello'
 
     @Debounce(debounceTime)
-    bounced() {}
+    bounce(value: string) {
+      this.someValue = value
+    }
   }
   return Comp
 }
 
-test('basic debouncing', () => {})
+test('basic debouncing', () => {
+  const wrapper = mount(factory())
+  const spy = jest.spyOn(wrapper.vm, 'bounce')
+  wrapper.vm.bounce('new')
+
+  expect(spy).toHaveBeenCalled()
+  expect(wrapper.vm.someValue).toBe('new')
+
+  spy.mockRestore()
+})
