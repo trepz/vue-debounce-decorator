@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import flushPromises from 'flush-promises'
 import { mount } from '@vue/test-utils'
-import { Debounce } from '../../src/vue-debounce-decorator'
+import { Debounce, debounce } from '../../src/vue-debounce-decorator'
 
 jest.useFakeTimers()
 
@@ -25,6 +25,20 @@ const factory = (debounceTime: number = 500, componentOptions?: any) => {
   }
   return Comp
 }
+
+test('debouncing function outside of vue', () => {
+  const mock = jest.fn()
+  const debouncedMock = debounce(mock, 500, this)
+  for (let i = 0; i < 10; i++) {
+    debouncedMock()
+  }
+  jest.runAllTimers()
+  expect(mock).toHaveBeenCalledTimes(1)
+
+  debouncedMock()
+  jest.runAllTimers()
+  expect(mock).toHaveBeenCalledTimes(2)
+})
 
 test('basic debouncing', () => {
   const wrapper = mount(factory())
