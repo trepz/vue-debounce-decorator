@@ -29,9 +29,11 @@ const factory = (debounceTime: number = 500, componentOptions?: any) => {
 test('basic debouncing', () => {
   const wrapper = mount(factory())
   const spy = jest.spyOn(wrapper.vm, 'bounce')
-  wrapper.vm.bounce('new')
+  Array.from(Array(10), _ => wrapper.vm.bounce('new'))
 
-  expect(spy).toHaveBeenCalled()
+  jest.runAllTimers()
+
+  expect(spy).toHaveBeenCalledTimes(1)
   expect(wrapper.vm.someValue).toBe('new')
 
   spy.mockRestore()
