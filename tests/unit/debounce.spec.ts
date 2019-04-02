@@ -57,3 +57,13 @@ test('basic debouncing in vue component', () => {
   jest.runAllTimers()
   expect(spy).toHaveBeenCalledTimes(2)
 })
+
+test('properties can be updated from inside debounced wrapper (correct bindings for "this")', async done => {
+  const wrapper = mount(factory())
+  wrapper.vm.bounce('new value')
+  jest.runAllTimers()
+  expect(spy).toHaveBeenCalledTimes(1)
+  await flushPromises()
+  expect(wrapper.vm.someValue).toBe('new value')
+  done()
+})
