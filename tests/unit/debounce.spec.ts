@@ -40,7 +40,7 @@ test('debouncing function outside of vue', () => {
   expect(mock).toHaveBeenCalledTimes(2)
 })
 
-test('basic debouncing', () => {
+test('basic debouncing in vue component', () => {
   const wrapper = mount(factory())
   const spy = jest.spyOn(wrapper.vm, 'bounce')
   Array.from(Array(10), _ => wrapper.vm.bounce('new'))
