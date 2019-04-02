@@ -6,6 +6,7 @@ import { mount } from '@vue/test-utils'
 import { Debounce, debounce } from '../../src/vue-debounce-decorator'
 
 jest.useFakeTimers()
+let spy = jest.fn()
 
 // Component factory
 const factory = (debounceTime: number = 500, componentOptions?: any) => {
@@ -19,12 +20,15 @@ const factory = (debounceTime: number = 500, componentOptions?: any) => {
     someValue = 'Hello'
 
     @Debounce(debounceTime)
-    bounce(value: string) {
+    bounce(value: string = '') {
+      spy()
       this.someValue = value
     }
   }
   return Comp
 }
+
+afterEach(() => spy.mockReset())
 
 test('debouncing function outside of vue', () => {
   const mock = jest.fn()
@@ -42,13 +46,14 @@ test('debouncing function outside of vue', () => {
 
 test('basic debouncing in vue component', () => {
   const wrapper = mount(factory())
-  const spy = jest.spyOn(wrapper.vm, 'bounce')
-  Array.from(Array(10), _ => wrapper.vm.bounce('new'))
-
+  for (let i = 0; i < 10; i++) {
+    wrapper.vm.bounce()
+  }
   jest.runAllTimers()
 
   expect(spy).toHaveBeenCalledTimes(1)
-  expect(wrapper.vm.someValue).toBe('new')
 
-  spy.mockRestore()
+  wrapper.vm.bounce()
+  jest.runAllTimers()
+  expect(spy).toHaveBeenCalledTimes(2)
 })
