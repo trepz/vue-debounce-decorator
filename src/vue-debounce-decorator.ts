@@ -23,27 +23,3 @@ export function Debounce(time: number): MethodDecorator {
     }
   })
 }
-
-export function debounce(fun: any, time: number, thisArg: any) {
-  let timeoutId: number | undefined
-
-  const wrapper = Object.assign(
-    (...args: any[]) => {
-      wrapper.clear()
-
-      timeoutId = setTimeout(() => {
-        timeoutId = undefined
-        fun.apply(thisArg, args)
-      }, time)
-    },
-    {
-      clear() {
-        if (timeoutId) {
-          clearTimeout(timeoutId)
-          timeoutId = undefined
-        }
-      },
-    },
-  )
-  return wrapper
-}
