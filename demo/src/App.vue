@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { Debounce } from '../../src/vue-debounce-decorator'
+import { Debounce } from '../../lib/vue-debounce-decorator'
 
 @Component
 export default class App extends Vue {
