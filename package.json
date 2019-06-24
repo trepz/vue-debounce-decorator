@@ -1,6 +1,6 @@
 {
   "name": "vue-debounce-decorator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Debounce methods in vue class components",
   "main": "lib/vue-debounce-decorator.js",
   "author": "trepz",
